@@ -4,9 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MouseTray"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        Visibility="Hidden">
     <Grid>
-        
+        <tb:TaskbarIcon MenuActivation="RightClick" PopupActivation="LeftOrDoubleClick" IconSource="Xenatt-Minimalism-App-Launcher.ico" ToolTipText="hello world" >
+            <tb:TaskbarIcon.TrayPopup>
+                <Border Background="White" BorderBrush="Black" Width="300" Height="500">
+                    <StackPanel Width="280" Height="480">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Citlivost kurzoru: " HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Name="SensText"></TextBlock>
+                        </StackPanel>
+                        <Slider Name="SensSlider" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280" Minimum="1" Maximum="20" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Rychlost posunu kolečka (počet řádků): " HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Name="ScrollText"></TextBlock>
+                        </StackPanel>
+                        <Slider Name="ScrollSlider" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280" Minimum="1" Maximum="100" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Rychlost dvojkliku: " HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock Name="DoubleClickText"></TextBlock>
+                        </StackPanel>
+                        <Slider Name="DoubleClickSlider" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280" Minimum="1" Maximum="5000" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
+                    </StackPanel>
+                </Border>
+            </tb:TaskbarIcon.TrayPopup>
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu Background="White">
+                    <MenuItem Header="Exit" Click="Exit_Click" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
     </Grid>
 </Window>

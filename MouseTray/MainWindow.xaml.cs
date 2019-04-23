@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,6 +25,45 @@ namespace MouseTray
         public MainWindow()
         {
             InitializeComponent();
+            Vychozi.vychoziSens = Vychozi.ZjistitSens();
+            SensText.Text = Vychozi.ZjistitSens().ToString();
+            Vychozi.vychoziScroll = Vychozi.ZjistitScroll();
+            DoubleClickText.Text = Vychozi.ZjistitDoubleClick().ToString();
+            Vychozi.vychoziDoubleClick = Vychozi.ZjistitDoubleClick();
+            ScrollText.Text = Vychozi.ZjistitScroll().ToString();
+            SensSlider.Value = Vychozi.vychoziSens;
+            ScrollSlider.Value = Vychozi.vychoziScroll;
+            DoubleClickSlider.Value = Vychozi.vychoziDoubleClick;
+            SensSlider.ValueChanged += SensSlider_ValueChanged;
+            ScrollSlider.ValueChanged += ScrollSlider_ValueChanged;
+            DoubleClickSlider.ValueChanged += DoubleClickSlider_ValueChanged;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Zmena.ZmenitSens(Vychozi.vychoziSens);
+            Zmena.ZmenitScroll(Vychozi.vychoziScroll);
+            Zmena.ZmenitDoubleClick(Vychozi.vychoziDoubleClick);
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void SensSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = (Slider)sender;
+            Zmena.ZmenitSens((uint)slider.Value);
+            SensText.Text = Vychozi.ZjistitSens().ToString();
+        }
+        private void ScrollSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = (Slider)sender;
+            Zmena.ZmenitScroll((uint)slider.Value);
+            ScrollText.Text = Vychozi.ZjistitScroll().ToString();
+        }
+        private void DoubleClickSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = (Slider)sender;
+            Zmena.ZmenitDoubleClick((uint)slider.Value);
+            DoubleClickText.Text = Vychozi.ZjistitDoubleClick().ToString();
         }
     }
 }
