@@ -37,6 +37,19 @@ namespace MouseTray
             SensSlider.ValueChanged += SensSlider_ValueChanged;
             ScrollSlider.ValueChanged += ScrollSlider_ValueChanged;
             DoubleClickSlider.ValueChanged += DoubleClickSlider_ValueChanged;
+            Vypsat();
+        }
+
+        private void Vypsat()
+        {
+            List<Profil> profily = FileManager.NacistProfily();
+            foreach (var item in profily)
+            {
+                ListViewItem listViewItem = new ListViewItem { Width = 275 };
+                Button button = new Button { Width = 265, Content = item.Nazev };
+                listViewItem.Content = button;
+                ProfilyList.Items.Add(listViewItem);
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -64,6 +77,12 @@ namespace MouseTray
             Slider slider = (Slider)sender;
             Zmena.ZmenitDoubleClick((uint)slider.Value);
             DoubleClickText.Text = Vychozi.ZjistitDoubleClick().ToString();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Profil profil = new Profil { Nazev = NazevInput.Text, DoubleClick = Vychozi.ZjistitDoubleClick(), Scroll = Vychozi.ZjistitScroll(), Sens = Vychozi.ZjistitSens() };
+            FileManager.UlozitProfil(profil);
         }
     }
 }
