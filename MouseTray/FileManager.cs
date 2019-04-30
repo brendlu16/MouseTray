@@ -9,17 +9,20 @@ namespace MouseTray
 {
     class FileManager
     {
-        private static string path = @"D:\source\repos\MouseTray\";//Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+        private static readonly string path = @"profily\";
+        public static void ZkontrolovatSlozku()
+        {
+            Directory.CreateDirectory("profily");
+        }
         public static void UlozitProfil(Profil profil)
         {
+            ZkontrolovatSlozku();
             string path2 = System.IO.Path.Combine(path, profil.Nazev+".json");
-            using (var tw = new StreamWriter(path, true))
-            {
-                tw.WriteLine(JsonConverter.ProfilDoJson(profil));
-            }
+            System.IO.File.WriteAllText(path2, JsonConverter.ProfilDoJson(profil));
         }
         public static List<Profil> NacistProfily()
         {
+            ZkontrolovatSlozku();
             string[] files = System.IO.Directory.GetFiles(path, "*.json");
             List<Profil> profily = new List<Profil>();
             foreach (var item in files)
@@ -27,6 +30,13 @@ namespace MouseTray
                 profily.Add(JsonConverter.ProfilZJson(File.ReadAllText(item)));
             }
             return profily;
+        }
+        public static Profil NacistProfil(string nazev)
+        {
+            ZkontrolovatSlozku();
+            string path2 = System.IO.Path.Combine(path, nazev + ".json");
+            var file = System.IO.File.ReadAllText(path2);
+            return JsonConverter.ProfilZJson(file);
         }
     }
 }
