@@ -115,6 +115,7 @@ namespace MouseTray
                 HttpManager.NahratProfil(profil);
             }
             catch (Exception) { }
+            ProfilSelector.Text = NazevInput.Text;
             NazevInput.Text = "";
             Vypsat();
         }
@@ -161,6 +162,7 @@ namespace MouseTray
                 Profil profil = FileManager.NacistProfil(ProfilSelector.Text);
                 FileManager.SmazatProfil(profil.Nazev);
                 HttpManager.SmazatProfil(profil.Nazev);
+                ProfilSelector.Text = "Žádný profil";
                 Vypsat();
             }
             catch (Exception)
