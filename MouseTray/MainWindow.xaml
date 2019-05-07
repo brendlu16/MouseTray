@@ -28,10 +28,13 @@
                             <TextBlock Name="DoubleClickText"></TextBlock>
                         </StackPanel>
                         <Slider Name="DoubleClickSlider" HorizontalAlignment="Left" VerticalAlignment="Center" Width="280" Minimum="1" Maximum="5000" TickPlacement="BottomRight" IsSnapToTickEnabled="True"/>
-                        <TextBlock Name="ProfilSelector" Text="Žádný profil" Margin="0, 10" Width="280"></TextBlock>
+                        <Grid Margin="0, 10">
+                            <TextBlock Name="ProfilSelector" Text="Žádný profil" Width="280"></TextBlock>
+                            <Button Content="Smazat profil" Click="Button_Click_Smazat" Width="100" HorizontalAlignment="Right"></Button>
+                        </Grid>
                         <ListView Name="ProfilyList" Visibility="Visible" Width="280" Height="100" ScrollViewer.HorizontalScrollBarVisibility="Disabled"></ListView>
                         <TextBox Name="NazevInput" Height="23" TextWrapping="Wrap" Width="280" Margin="0, 10"/>
-                        <Button Content="Vytvořit profil" Click="Button_Click" Width="280"></Button>
+                        <Button Content="Vytvořit profil" Click="Button_Click_Vytvorit" Width="280"></Button>
                     </StackPanel>
                 </Border>
             </tb:TaskbarIcon.TrayPopup>

@@ -42,16 +42,28 @@ namespace MouseTray
 
         public void Vypsat()
         {
+            try
+            {
+                List<Profil> profily2 = HttpManager.NacistVse();
+                foreach (var item in profily2)
+                {
+                    FileManager.UlozitProfil(item);
+                }
+            } catch (Exception) { }
             ProfilyList.Items.Clear();
-            //List<Profil> profily = FileManager.NacistProfily();
-            List<Profil> profily = HttpManager.NacistVse();
+            List<Profil> profily = FileManager.NacistProfily();
             foreach (var item in profily)
             {
                 ListViewItem listViewItem = new ListViewItem { Width = 275 };
                 Button button = new Button { Width = 265, Content = item.Nazev };
-                button.Click += Button_Click2;
+                button.Click += Button_Click_Vyber;
                 listViewItem.Content = button;
                 ProfilyList.Items.Add(listViewItem);
+                try
+                {
+                    HttpManager.NahratProfil(item);
+                }
+                catch (Exception) { }
             }
         }
 
@@ -68,31 +80,45 @@ namespace MouseTray
             Slider slider = (Slider)sender;
             Zmena.ZmenitSens((uint)slider.Value);
             SensText.Text = Vychozi.ZjistitSens().ToString();
-            ProfilSelector.Text = "Žádný profil";
+            if (!KontrolaProfilu())
+            {
+                ProfilSelector.Text = "Žádný profil";
+            }
         }
         private void ScrollSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Slider slider = (Slider)sender;
             Zmena.ZmenitScroll((uint)slider.Value);
             ScrollText.Text = Vychozi.ZjistitScroll().ToString();
-            ProfilSelector.Text = "Žádný profil";
+            if (!KontrolaProfilu())
+            {
+                ProfilSelector.Text = "Žádný profil";
+            }
         }
         private void DoubleClickSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Slider slider = (Slider)sender;
             Zmena.ZmenitDoubleClick((uint)slider.Value);
             DoubleClickText.Text = Vychozi.ZjistitDoubleClick().ToString();
-            ProfilSelector.Text = "Žádný profil";
+            if (!KontrolaProfilu())
+            {
+                ProfilSelector.Text = "Žádný profil";
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_Vytvorit(object sender, RoutedEventArgs e)
         {
             Profil profil = new Profil { Nazev = NazevInput.Text, DoubleClick = Vychozi.ZjistitDoubleClick(), Scroll = Vychozi.ZjistitScroll(), Sens = Vychozi.ZjistitSens() };
             FileManager.UlozitProfil(profil);
+            try
+            {
+                HttpManager.NahratProfil(profil);
+            }
+            catch (Exception) { }
             NazevInput.Text = "";
             Vypsat();
         }
-        private void Button_Click2(object sender, RoutedEventArgs e)
+        private void Button_Click_Vyber(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             Profil profil = FileManager.NacistProfil(button.Content.ToString());
@@ -107,6 +133,40 @@ namespace MouseTray
             SensSlider.Value = Vychozi.ZjistitSens();
             ScrollSlider.Value = Vychozi.ZjistitScroll();
             DoubleClickSlider.Value = Vychozi.ZjistitDoubleClick();
+        }
+        private bool KontrolaProfilu()
+        {
+            try
+            {
+                Profil profil = FileManager.NacistProfil(ProfilSelector.Text);
+                if (profil.Sens == Vychozi.ZjistitSens() && profil.Scroll == Vychozi.ZjistitScroll() && profil.DoubleClick == Vychozi.ZjistitDoubleClick())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private void Button_Click_Smazat(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Profil profil = FileManager.NacistProfil(ProfilSelector.Text);
+                FileManager.SmazatProfil(profil.Nazev);
+                HttpManager.SmazatProfil(profil.Nazev);
+                Vypsat();
+            }
+            catch (Exception)
+            {
+                Vypsat();
+            }
         }
     }
 }

@@ -38,5 +38,11 @@ namespace MouseTray
             var file = System.IO.File.ReadAllText(path2);
             return JsonConverter.ProfilZJson(file);
         }
+        public static void SmazatProfil(string nazev)
+        {
+            ZkontrolovatSlozku();
+            string path2 = System.IO.Path.Combine(path, nazev + ".json");
+            File.Delete(path2);
+        }
     }
 }
