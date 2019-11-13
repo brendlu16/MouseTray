@@ -170,5 +170,19 @@ namespace MouseTray
                 Vypsat();
             }
         }
+
+        private void Button_Click_Login(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                HttpManager.Prihlasit(LoginName.Text, LoginHeslo.Text);
+                Vypsat();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

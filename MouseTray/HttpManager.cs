@@ -10,6 +10,8 @@ namespace MouseTray
 {
     class HttpManager
     {
+        static string Jmeno;
+        static string Heslo;
         public static List<Profil> NacistVse()
         {
             List<Profil> profily = new List<Profil>();
@@ -18,8 +20,11 @@ namespace MouseTray
         }
         public static async Task<List<Profil>> GetVse(List<Profil> profily)
         {
+            string test = Jmeno;
             HttpClient client = new HttpClient();
-            var response = await client.GetAsync("https://brendlu16.sps-prosek.cz/");
+            var parameters = new Dictionary<string, string> { { "Jmeno", Jmeno }, { "Heslo", Heslo } };
+            var encodedContent = new FormUrlEncodedContent(parameters);
+            var response = await client.PostAsync("https://brendlu16.sps-prosek.cz/", encodedContent);
             string json = await response.Content.ReadAsStringAsync();
             List<string> stringy = json.Split(';').ToList<string>();
             foreach (var item in stringy)
@@ -66,6 +71,11 @@ namespace MouseTray
             var parameters = new Dictionary<string, string> { { "NazevSmazat", nazev } };
             var encodedContent = new FormUrlEncodedContent(parameters);
             var response = await client.PostAsync("https://brendlu16.sps-prosek.cz/", encodedContent);
+        }
+        public static void Prihlasit(string jmeno, string heslo)
+        {
+            Jmeno = jmeno;
+            Heslo = heslo;
         }
     }
 }
