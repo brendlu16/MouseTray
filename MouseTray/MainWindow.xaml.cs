@@ -160,8 +160,8 @@ namespace MouseTray
             try
             {
                 Profil profil = FileManager.NacistProfil(ProfilSelector.Text);
-                FileManager.SmazatProfil(profil.Nazev);
                 HttpManager.SmazatProfil(profil.Nazev);
+                FileManager.SmazatProfil(profil.Nazev);                
                 ProfilSelector.Text = "Žádný profil";
                 Vypsat();
             }
@@ -175,7 +175,7 @@ namespace MouseTray
         {
             try
             {
-                HttpManager.Prihlasit(LoginName.Text, LoginHeslo.Text);
+                HttpManager.Prihlasit(LoginName.Text, LoginHeslo.Password);
                 Vypsat();
             }
             catch (Exception)

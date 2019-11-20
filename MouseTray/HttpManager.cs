@@ -12,6 +12,7 @@ namespace MouseTray
     {
         static string Jmeno;
         static string Heslo;
+        static readonly string URL = "https://brendlu16.sps-prosek.cz/API/";
         public static List<Profil> NacistVse()
         {
             List<Profil> profily = new List<Profil>();
@@ -24,7 +25,7 @@ namespace MouseTray
             HttpClient client = new HttpClient();
             var parameters = new Dictionary<string, string> { { "Jmeno", Jmeno }, { "Heslo", Heslo } };
             var encodedContent = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync("https://brendlu16.sps-prosek.cz/", encodedContent);
+            var response = await client.PostAsync(URL, encodedContent);
             string json = await response.Content.ReadAsStringAsync();
             List<string> stringy = json.Split(';').ToList<string>();
             foreach (var item in stringy)
@@ -41,25 +42,9 @@ namespace MouseTray
         {
             string json = JsonConverter.ProfilDoJson(profil);
             HttpClient client = new HttpClient();
-            var parameters = new Dictionary<string, string> { { "Nazev", profil.Nazev }, { "Sens", profil.Sens.ToString() }, { "Scroll", profil.Scroll.ToString() }, { "DoubleClick", profil.DoubleClick.ToString()} };
+            var parameters = new Dictionary<string, string> { { "Jmeno", Jmeno }, { "Heslo", Heslo }, { "Nazev", profil.Nazev }, { "Sens", profil.Sens.ToString() }, { "Scroll", profil.Scroll.ToString() }, { "DoubleClick", profil.DoubleClick.ToString()} };
             var encodedContent = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync("https://brendlu16.sps-prosek.cz/", encodedContent);
-        }
-        public static Profil NacistProfil(string nazev)
-        {
-            Profil profil = new Profil();
-            Profil result = Task.Run(async () => { return await GetProfil(profil); }).Result;
-            return result;
-        }
-        public static async Task<Profil> GetProfil(Profil profil)
-        {
-            HttpClient client = new HttpClient();
-            var parameters = new Dictionary<string, string> { { "param1", "1" }, { "param2", "2" } };
-            var encodedContent = new FormUrlEncodedContent(parameters);
-            var response = await client.GetAsync("https://brendlu16.sps-prosek.cz/");
-            string json = await response.Content.ReadAsStringAsync();
-            profil = JsonConverter.ProfilZJson(json);
-            return profil;
+            var response = await client.PostAsync(URL, encodedContent);
         }
         public static void SmazatProfil(string nazev)
         {
@@ -70,7 +55,7 @@ namespace MouseTray
             HttpClient client = new HttpClient();
             var parameters = new Dictionary<string, string> { { "NazevSmazat", nazev } };
             var encodedContent = new FormUrlEncodedContent(parameters);
-            var response = await client.PostAsync("https://brendlu16.sps-prosek.cz/", encodedContent);
+            var response = await client.PostAsync(URL, encodedContent);
         }
         public static void Prihlasit(string jmeno, string heslo)
         {
