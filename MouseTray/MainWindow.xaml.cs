@@ -155,12 +155,12 @@ namespace MouseTray
             }
         }
 
-        private void Button_Click_Smazat(object sender, RoutedEventArgs e)
+        private async void Button_Click_Smazat(object sender, RoutedEventArgs e)
         {
             try
             {
                 Profil profil = FileManager.NacistProfil(ProfilSelector.Text);
-                HttpManager.SmazatProfil(profil.Nazev);
+                await Task.Run(() => HttpManager.DeleteProfil(profil.Nazev));
                 FileManager.SmazatProfil(profil.Nazev);                
                 ProfilSelector.Text = "Žádný profil";
                 Vypsat();
