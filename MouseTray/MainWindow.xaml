@@ -35,17 +35,23 @@
                         <ListView Name="ProfilyList" Visibility="Visible" Width="280" Height="100" ScrollViewer.HorizontalScrollBarVisibility="Disabled"></ListView>
                         <TextBox Name="NazevInput" Height="23" TextWrapping="Wrap" Width="280" Margin="0, 10"/>
                         <Button Content="Vytvořit profil" Click="Button_Click_Vytvorit" Width="280"></Button>
-                        <StackPanel Name="LoginOkno" Visibility="Visible"  Width="280" Height="100">
-                            <Grid>
-                                <TextBox Name="LoginName" Height="23" TextWrapping="Wrap" Width="180" HorizontalAlignment="Left" Margin="0, 10"/>
-                                <Label Content="Jméno" Width="90" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                        <Grid>
+                            <Grid Name="LogedinGrid" Margin="0, 10" Visibility="Hidden">
+                                <TextBlock Name="JmenoUzivatele" Text="" Width="280"></TextBlock>
+                                <Button Content="Odhlásit" Click="Button_Click_Odhlasit" Width="100" VerticalAlignment="Top" HorizontalAlignment="Right"></Button>
                             </Grid>
-                            <Grid>
-                                <PasswordBox Name="LoginHeslo" Height="23" Width="180" HorizontalAlignment="Left" Margin="0"/>
-                                <Label Content="Heslo" Width="90" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
-                            </Grid>
-                            <Button Content="Přihlásit" Click="Button_Click_Login" Width="280" Margin="0, 10"></Button>
-                        </StackPanel>
+                            <StackPanel Name="LoginOkno" Visibility="Visible"  Width="280" Height="100">
+                                <Grid>
+                                    <TextBox Name="LoginName" Height="23" TextWrapping="Wrap" Width="180" HorizontalAlignment="Left" Margin="0, 10"/>
+                                    <Label Content="Jméno" Width="90" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                                </Grid>
+                                <Grid>
+                                    <PasswordBox Name="LoginHeslo" Height="23" Width="180" HorizontalAlignment="Left" Margin="0"/>
+                                    <Label Content="Heslo" Width="90" HorizontalAlignment="Right" VerticalAlignment="Center"></Label>
+                                </Grid>
+                                <Button Content="Přihlásit" Click="Button_Click_Login" Width="280" Margin="0, 10"></Button>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </Border>
             </tb:TaskbarIcon.TrayPopup>

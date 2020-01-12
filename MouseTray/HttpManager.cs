@@ -10,11 +10,12 @@ namespace MouseTray
 {
     class HttpManager
     {
-        static string Jmeno;
+        public static string Jmeno;
         static string Heslo;
         static readonly string URLNacteni = "https://brendlu16.sps-prosek.cz/API/nacteniprofilu.php";
         static readonly string URLNahrani = "https://brendlu16.sps-prosek.cz/API/nahraniprofilu.php";
         static readonly string URLSmazani = "https://brendlu16.sps-prosek.cz/API/smazaniprofilu.php";
+        static readonly string URLLogin = "https://brendlu16.sps-prosek.cz/API/prihlaseni.php";
         public static List<Profil> NacistVse()
         {
             List<Profil> profily = new List<Profil>();
@@ -58,10 +59,44 @@ namespace MouseTray
             var response = await client.PostAsync(URLSmazani, encodedContent);
             string json = await response.Content.ReadAsStringAsync();
         }
-        public static void Prihlasit(string jmeno, string heslo)
+        public static bool Prihlasit(string jmeno, string heslo)
         {
-            Jmeno = jmeno;
-            Heslo = heslo;
+            var result = Task.Run(async () => { return await Login(jmeno, heslo); }).Result;
+            return result;
+        }
+        public static void Odhlasit()
+        {
+            Jmeno = "";
+            Heslo = "";
+        }
+        public async static Task<bool> Login(string jmeno, string heslo)
+        {
+            string hesloHash = Hashovat(heslo);
+            HttpClient client = new HttpClient();
+            var parameters = new Dictionary<string, string> { { "Jmeno", jmeno }, { "Heslo", hesloHash } };
+            var encodedContent = new FormUrlEncodedContent(parameters);
+            var response = await client.PostAsync(URLLogin, encodedContent);
+            string odpoved = await response.Content.ReadAsStringAsync();
+            if (odpoved == "1")
+            {
+                Jmeno = jmeno;
+                Heslo = hesloHash;
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+        private static string Hashovat(string heslo)
+        {
+            var crypt = new System.Security.Cryptography.SHA256Managed();
+            var hash = new System.Text.StringBuilder();
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(heslo));
+            foreach (byte theByte in crypto)
+            {
+                hash.Append(theByte.ToString("x2"));
+            }
+            return hash.ToString();
         }
     }
 }

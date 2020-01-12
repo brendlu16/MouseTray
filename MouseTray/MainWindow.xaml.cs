@@ -175,12 +175,33 @@ namespace MouseTray
         {
             try
             {
-                HttpManager.Prihlasit(LoginName.Text, LoginHeslo.Password);
+                if (HttpManager.Prihlasit(LoginName.Text, LoginHeslo.Password))
+                {
+                    LoginOkno.Visibility = Visibility.Hidden;
+                    LogedinGrid.Visibility = Visibility.Visible;
+                    JmenoUzivatele.Text = HttpManager.Jmeno;
+                }
+                Vypsat();
+                LoginName.Text = "";
+                LoginHeslo.Password = "";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        private void Button_Click_Odhlasit(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                HttpManager.Odhlasit();
+                LoginOkno.Visibility = Visibility.Visible;
+                LogedinGrid.Visibility = Visibility.Hidden;
+                JmenoUzivatele.Text = "";
                 Vypsat();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
